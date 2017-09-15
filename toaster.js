@@ -3,7 +3,19 @@ $.toaster = {
 		active_toasts: [],
 		current_id: 0,
 		current_top: 40,
+		initial_top: 40,
 
+		setInitialTop: function(value){
+			var difference = $.toaster.initial_top - value; //calcula qual a diferença entre o valor atual e o novo para mover as toasts atuais pela tela.
+			for(i=0;i<$.toaster.active_toasts.length;i++){
+				$( "#toast-"+$.toaster.active_toasts[i] ).animate({
+					top: parseInt($("#toast-"+$.toaster.active_toasts[i] ).css("top"))-difference
+				}, 100);
+			}
+			$.toaster.initial_top = value;
+			$.toaster.current_top -= difference;
+		},
+		
 		show: function(type,message,timeout){
 			$.toaster.current_id++;
 			var r = $.toaster.current_id;
@@ -16,7 +28,6 @@ $.toaster = {
 			$("body").append(toast);
 			$.toaster.current_top+=$("#toast-"+r).outerHeight()+10;
 			$("#toast-"+r).hide().slideDown("fast");
-			$(document).foundation();
 			setTimeout(function(){
 				$.toaster.hide(r);
 			},((typeof timeout !== 'undefined') ? timeout : 5000));
