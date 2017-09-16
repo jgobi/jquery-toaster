@@ -49,13 +49,14 @@ $.toaster = {
 			 */
 			var difference = $.toaster.initialTop - newInitialTop; //evaluate the difference between the new and the old top for moving the existing toasts to the right place.
 			for(i=0;i<$.toaster.activeToasts.length;i++){ //For each toast
-				$( "#toast-"+$.toaster.activeToasts[i] ).animate({ //Move it to the rigth place with an animation
-					top: parseInt($("#toast-"+$.toaster.activeToasts[i] ).css("top"))-difference,
-					left: (appearOnLeft ? '0' : ''),
-					rigth: (appearOnLeft ? '' : '0')
+				$( "#toast-"+$.toaster.activeToasts[i] ).css({ //Move it to the rigth side WITHOUT an animation (TODO: put animation here)
+					left: ($.toaster.appearOnLeft ? 0 : ''),
+					right: ($.toaster.appearOnLeft ? '' : 0)
+				}).animate({ //Move it to the rigth top with an animation
+					top: parseInt($("#toast-"+$.toaster.activeToasts[i] ).css("top"))-difference
 				}, 100);
 			}
-			$.toaster.initialTop = value; //Set the top position to new value
+			$.toaster.initialTop = newInitialTop; //Set the top position to new value
 			$.toaster.currentTop -= difference; //Update the next toast position
 		},
 		
@@ -90,7 +91,7 @@ $.toaster = {
 				if($.toaster.appearOnLeft) //appearOnLeft
 					toast+='style="left: 0; ';
 				else //appearOnRigth
-					toast+='style="rigth: 0; ';
+					toast+='style="right: 0; ';
 					
 				toast+='z-index: 999999; position: fixed; top: '+$.toaster.currentTop+'px; margin:20px" id="toast-'+r+'" data-alert class="alert-box '+type+'">'+message+' &nbsp;&nbsp;&nbsp;<a href="#" onclick="$.toaster.hide('+r+')" class="close">&times;</a></div>';
 				
