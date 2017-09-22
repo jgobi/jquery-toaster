@@ -1,2 +1,2 @@
-# foundation-toaster
-A toast notification plugin made with jQuery and compatible with Foundation.
+# jquery-toaster
+A toast notification plugin made with jQuery and _currently_ dependent of some classes of the Foundation framework.
