@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js" ></script>
+    <script src="foundation.min.js" ></script>
+	<link rel="stylesheet" href="foundation.min.css" />
+	<script src="../toaster.js" ></script>
+  </head>
+
+  <body>
+
+    <div class="content">
+		Segundos para ficar visível: <input id="time" type="number" value="5"/><br />
+		<button onclick="t()">Lançar toast</button>
+		<br /><br />
+		Top inicial: <input id="topo" type="number" value="40"/>
+		<button onclick="o()">Mudar top inicial</button>
+    </div>
+
+    <script>
+	function t(){
+		$.toaster.show("info","Notificação toast de teste",parseInt($("#time").val())*1000);
+	}
+	function o(){
+		$.toaster.setInitialTop(parseInt($("#topo").val()));
+	}
+    </script>
+
+  </body>
+
+</html>
