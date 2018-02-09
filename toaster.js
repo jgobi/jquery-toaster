@@ -77,29 +77,23 @@ $.toaster = {
 	 */
 	show: function(type,message,options){
 		$.toaster.activeToasts.push(++$.toaster.currentId); //add the new toast to the active toasts array
-		if( $(window).width() <= 720 ){ //smartphones - will show the toast in the bottom, and only one once.
-			if((typeof options.closeOnClick == 'boolean' && options.closeOnClick) || (typeof options.closeOnClick == 'undefined' && $.toaster.closeOnClick)) //closeOnClick
-				var toast='<div onclick="$.toaster.hide('+$.toaster.currentId+')" style="cursor: pointer; ';
-			else //close only on X
-				var toast='<div style=" ';
-				
-			toast+='z-index: 999999; width: 100%; position: fixed; left: 0; bottom: 0px; margin:0px" id="toast-' +$.toaster.currentId+'" data-alert class="alert-box '+type+'">'+message+' &nbsp;&nbsp;&nbsp;<a href="#" onclick="$.toaster.hide('+$.toaster.currentId+')" class="close">&times;</a></div>';
-		}else{ //desktop - will show the toast in the left or right side, as defined on appearOnLeft prop.
-			if((typeof options.closeOnClick == 'boolean' && options.closeOnClick) || (typeof options.closeOnClick == 'undefined' && $.toaster.closeOnClick)) //closeOnClick
-				var toast='<div title="Clique para fechar." onclick="$.toaster.hide('+$.toaster.currentId+')" style="cursor: pointer; ';
-			else
-				var toast='<div style=" ';
-				
-			if($.toaster.appearOnLeft) //appearOnLeft
-				toast+='left: 0; ';
-			else //appearOnRight
-				toast+='right: 0; ';
-				
-			toast+='z-index: 999999; position: fixed; top: '+$.toaster.currentTop+'px; margin:20px" id="toast-'+$.toaster.currentId+'" data-alert class="alert-box '+type+'">'+message+' &nbsp;&nbsp;&nbsp;<a href="#" onclick="$.toaster.hide('+$.toaster.currentId+')" class="close">&times;</a></div>';
-			
+
+		if((typeof options.closeOnClick == 'undefined' && $.toaster.closeOnClick) || options.closeOnClick) //closeOnClick
+			var toast = '<div onclick="$.toaster.hide(' + $.toaster.currentId + ')" style="cursor: pointer; ';
+		else //close only on X
+			var toast = '<div style="z-index: 999999; position: fixed;  ';
+
+		if( $(window).width() <= 720 ) //smartphones - will show the toast in the bottom, and only one once.
+			toast += 'width: 100%; left: 0; bottom: 0px; margin:0px" ';
+		else{ //desktop - will show the toast in the left or right side, as defined on appearOnLeft prop.
+			toast += $.toaster.appearOnLeft ? 'left: 0; ' : 'right: 0; ';
+			toast += 'top: '+$.toaster.currentTop+'px; margin:20px" title="Clique para fechar." ';
 		}
+
+		toast += 'id="toast-'+$.toaster.currentId+'" data-alert class="alert-box '+type+'">'+message+' &nbsp;&nbsp;&nbsp;<a href="#" onclick="$.toaster.hide('+$.toaster.currentId+')" class="close">&times;</a></div>';
+
 		$("body").append(toast); //inserts the toast on the page.
-		$.toaster.currentTop+=$("#toast-"+$.toaster.currentId).outerHeight()+10; //increase the top prop to the appropriate value for the next toast appear (10 is the margin)
+		$.toaster.currentTop += $("#toast-"+$.toaster.currentId).outerHeight()+10; //increase the top prop to the appropriate value for the next toast appear (10 is the margin)
 		$("#toast-"+$.toaster.currentId).hide().slideDown("fast"); //Immediately hide the toast and show it again. This way the user see an awesome transition :)
 		setTimeout(function(){ //Define the toasts timeout
 			$.toaster.hide($.toaster.currentId);
