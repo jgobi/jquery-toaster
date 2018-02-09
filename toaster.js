@@ -42,20 +42,21 @@ $.toaster = {
 		
 		var difference = $.toaster.initialTop - newInitialTop; //evaluate the difference between the new and the old top for moving the existing toasts to the right place.
 		
-		for(i=0;i<$.toaster.activeToasts.length;i++){ //For each toast
+		$.toaster.activeToasts.forEach(function adjustPositionY() { //For each toast
 			$( "#toast-"+$.toaster.activeToasts[i] ).animate({ //Move it to the right top with an animation
 				top: parseInt($("#toast-"+$.toaster.activeToasts[i] ).css("top"))-difference
 			}, 100);
-		}
+		});
+
 		if(newAppearOnLeft != $.toaster.appearOnLeft){ //if appear on left prop has changed
-			for(i=0;i<$.toaster.activeToasts.length;i++){ //For each toast
-				$( "#toast-"+$.toaster.activeToasts[i] ).slideUp("fast",function(){ //Hide the toasts with animation
+			$.toaster.activeToasts.forEach(function adjustPositionX() { //For each toast
+				$( "#toast-"+$.toaster.activeToasts[i] ).slideUp("fast", function (){ //Hide the toasts with animation
 					$(this).css({ //Move it to the right side
 						left: ($.toaster.appearOnLeft ? 0 : ''),
 						right: ($.toaster.appearOnLeft ? '' : 0)
 					}).slideDown("fast"); //Show again the toasts with animation
 				});
-			}
+			});
 		}
 		
 		$.toaster.appearOnLeft = newAppearOnLeft; //Set the appearOnLeft to new value
@@ -118,11 +119,12 @@ $.toaster = {
 				var thisHeight=$("#toast-"+toast).outerHeight()+10; //grab the height of the toast to remove (10 is the margin)...
 				$.toaster.currentTop-=thisHeight; //Update currentTop to be the correct position for the next toast.
 				$(this).remove(); //properly remove the toast from the html
-				for(i=id;i<$.toaster.activeToasts.length;i++){ //for each remaining toast, rearrange they on the screen (avoid wrong spaces between two toasts)
+				
+				$.toaster.activeToasts.forEach(function adjustPositionYOnHide() { //for each remaining toast, rearrange they on the screen (avoid wrong spaces between two toasts)
 					$( "#toast-"+$.toaster.activeToasts[i] ).animate({ //move they up with an animation
 						top: parseInt($("#toast-"+$.toaster.activeToasts[i] ).css("top"))-thisHeight
 					}, 100);
-				}
+				});
 			});
 		}
 		return toast; //Returns the id of the dismissed toast for no reason. (This is equals to the toast parameter, but ok)
